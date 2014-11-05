@@ -21,7 +21,7 @@ redirect_uri = '{uri}:{port}/success'.format(
     port=config.PORT
 )
 
-autom_page = bottle.template(open('../index.tpl',"r").read())
+autom_page = bottle.template(open('index.tpl',"r").read())
 
 # class Hooks:
 #   def __init__(self):
@@ -44,34 +44,6 @@ class Routes:
     def __init__(self):
       @bottle.route('/', methods=['GET'])
       def index():
-        return autom_page
-
-      @bottle.route('/login<:re:/?>')
-      def login():
-        params = dict(
-            scope='email profile',
-            response_type='code',
-            redirect_uri=redirect_uri
-        )
-        url = google.get_authorize_url(**params)
-
-        bottle.redirect(url)
-
-      @bottle.route('/success<:re:/?>')
-      def login_success():
-        code = bottle.request.params.get('code')
-        auth_session = google.get_auth_session(
-            data=dict(
-                code=code,
-                redirect_uri=redirect_uri,
-                grant_type='authorization_code'
-            ),
-            decoder=json.loads
-        )
-        json_path = 'https://www.googleapis.com/oauth2/v1/userinfo'
-        session_json = auth_session.get(json_path).json()
-        # For non-Ascii characters to work properly!
-        session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())
         return autom_page
 
 class Automaton:
@@ -113,21 +85,33 @@ class Automaton:
             pass
 
 
-# class User:
-#     def __init__(self):
-#         @bottle.route('/user/create', method='POST')
-#         def create():
-#             return 'User create'
-#
-#         @bottle.route('/user/delete', method='POST')
-#         def delete():
-#             return 'User delete'
-#
-#         @bottle.route('/user/update', method='POST')
-#         def update():
-#             return 'User update'
-#
-#         @bottle.route('/user/view', method='GET')
-#         def view():
-#             import models.user
-#             return 'User view: ' + models.user
+class Users:
+    def __init__(self):
+      @bottle.route('/login<:re:/?>')
+      def login():
+        params = dict(
+            scope='email profile',
+            response_type='code',
+            redirect_uri=redirect_uri
+        )
+        url = google.get_authorize_url(**params)
+
+        bottle.redirect(url)
+
+      @bottle.route('/success<:re:/?>')
+      def login_success():
+        code = bottle.request.params.get('code')
+        auth_session = google.get_auth_session(
+            data=dict(
+                code=code,
+                redirect_uri=redirect_uri,
+                grant_type='authorization_code'
+            ),
+            decoder=json.loads
+        )
+        json_path = 'https://www.googleapis.com/oauth2/v1/userinfo'
+        session_json = auth_session.get(json_path).json()
+        # For non-Ascii characters to work properly!
+        session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())
+
+        return autom_page

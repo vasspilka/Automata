@@ -33,11 +33,11 @@ DB.init(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DA
 stderr.write("Connected to Google Cloud SQL database\n")
 
 stderr.write("Importing controllers\n")
+# Controllers.Hooks()
 Controllers.StaticFiles()
 Controllers.Routes()
 Controllers.Automaton()
-# Controllers.Hooks()
-# Controlers.Users()
+Controllers.Users()
 stderr.write("Controllers imported\n")
 
 bottle.debug(True)
