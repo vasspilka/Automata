@@ -30,6 +30,7 @@
                 <li><a href=''>Sign out</a></li>
             </ol>
             -->
+            <a href="/login">Log in using Google</a>
             <div class='eof'></div>
         </header>
         <div class='runner'>

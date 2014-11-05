@@ -72,13 +72,13 @@ port = config.PORT
 #
 # stderr.write("Controllers loaded\n")
 
-@bottle.hook('before_request')
-def global_session():
-    # Random 32byte state and Session intialazation
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
-    bottle.request.session = bottle.request.environ.get('beaker.session')
-    bottle.request.session['state'] = state
-    bottle.request.session.save()
+# @bottle.hook('before_request')
+# def global_session():
+#     # Random 32byte state and Session intialazation
+#     state = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
+#     bottle.request.session = bottle.request.environ.get('beaker.session')
+#     bottle.request.session['state'] = state
+#     bottle.request.session.save()
 
 ###
 #
@@ -89,7 +89,6 @@ def global_session():
 def server_static(path):
   return bottle.static_file(path, root='site')
 
-print "hello"
 @bottle.route('/', methods=['GET'])
 def index():
   return autom_page
