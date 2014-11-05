@@ -72,6 +72,56 @@ port = config.PORT
 #
 # stderr.write("Controllers loaded\n")
 
+@bottle.hook('before_request')
+def global_session():
+    # Random 32byte state and Session intialazation
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
+    bottle.request.session = bottle.request.environ.get('beaker.session')
+    bottle.request.session['state'] = state
+    bottle.request.session.save()
+
+###
+#
+#      Static Files and routes (Css,Javascritp and Images)
+#
+###
+@bottle.route('/:path#(images|css|js)\/.+#')
+def server_static(path):
+  return bottle.static_file(path, root='site')
+
+print "hello"
+@bottle.route('/', methods=['GET'])
+def index():
+  return autom_page
+
+@bottle.route('/login<:re:/?>')
+def login():
+  params = dict(
+      scope='email profile',
+      response_type='code',
+      redirect_uri=redirect_uri
+  )
+  url = google.get_authorize_url(**params)
+
+  bottle.redirect(url)
+
+@bottle.route('/success<:re:/?>')
+def login_success():
+  code = bottle.request.params.get('code')
+  auth_session = google.get_auth_session(
+      data=dict(
+          code=code,
+          redirect_uri=redirect_uri,
+          grant_type='authorization_code'
+      ),
+      decoder=json.loads
+  )
+  json_path = 'https://www.googleapis.com/oauth2/v1/userinfo'
+  session_json = auth_session.get(json_path).json()
+  # For non-Ascii characters to work properly!
+  session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())
+  return autom_page
+
 bottle.debug(True)
 bottle.run(app, host=host, port=port, reloader=True)
 
