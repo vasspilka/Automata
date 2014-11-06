@@ -1,15 +1,11 @@
 import db
+import config
+from IPython import embed ## For Debugging
 
+db=db.Database(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
 
-class User:
-  def __init__(self):
-    pass
+def automaton_create(name, data):
+    return db.insert('automata', {'name': name, 'data': data})
 
-class Automaton:
-  def __init__(self):
-
-    def create(name, data):
-      return db().insert('automata', {'name': name, 'data': data})
-
-    def item(id):
-      return db().selectOne('automata', {'id': id}, ('id', 'name', 'data'))
+def automaton_item(id):
+    return db.selectOne('automata', {'id': id}, ('id', 'name', 'data'))

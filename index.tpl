@@ -30,6 +30,8 @@
                 <li><a href=''>Sign out</a></li>
             </ol>
             -->
+            <button id="create">create</button>
+            <button id="view">view</button>
             <a href="/login">Log in using Google</a>
             <div class='eof'></div>
         </header>
@@ -77,5 +79,24 @@
         <script src='js/hidpi-canvas.min.js'></script>
         <script src='js/runner.js'></script>
         <script src='js/ui.js'></script>
+        <script>
+           $('#create').click( function() {
+             data = nfaview.serialize();
+             callback = "";
+             Server.Automaton.create(data,callback,200);
+           } );
+           $('#view').click( function() {
+             var response = '';
+             $.ajax({ type: "GET",
+                      url: "api/automaton/1",
+                      async: false,
+                      success : function(text)
+                      {
+                          response = text;
+                      }
+             });
+             nfaview.deserialize(response.data);
+           } );
+        </script>
     </body>
 </html>

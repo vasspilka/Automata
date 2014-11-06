@@ -4,6 +4,10 @@ import string
 import json
 import rauth
 import config
+import models
+from sys import stderr
+
+from IPython import embed ## For Debugging
 
 oauth2 = rauth.OAuth2Service
 
@@ -48,7 +52,7 @@ class Routes:
 
 class Automaton:
     def __init__(self):
-        @bottle.route('/automaton/create', method='POST')
+        @bottle.route('/api/automaton/create', method='POST')
         def create():
             stderr.write("Processing automaton/create request\n")
 
@@ -56,10 +60,10 @@ class Automaton:
             data = bottle.request.forms.data
 
             stderr.write("Creating new automaton\n")
-            id = models.automaton.create(name, data)
+            id = models.automaton_create(name, data)
             stderr.write("New automaton was created with id %i\n" % (id))
 
-            return {'id': id}
+            return autom_page
 
         @bottle.route('/automaton/delete', method='POST')
         def delete():
@@ -69,13 +73,12 @@ class Automaton:
         def update():
             pass
 
-        @bottle.route('/automaton/<id:int>',method='GET')
+        @bottle.route('/api/automaton/<id:int>',method='GET')
         def view(id):
-            stderr.write("Processing automaton/view request with id %i\n"
-                         % (id))
+            stderr.write("Processing automaton/view request with id %s\n" % (id))
 
             stderr.write("Retrieving automaton\n")
-            item = models.automaton.item(id)
+            item = models.automaton_item(id)
             stderr.write("Automaton successfully retrieved\n")
 
             return item
