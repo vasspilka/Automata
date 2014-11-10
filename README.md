@@ -6,7 +6,7 @@ theoretical computer science university departments.
 [Try it out](http://automata.discrete.gr/)
 
 Learn more about automata:
- 
+
  * [Wikipedia: Deterministic finite automaton](http://en.wikipedia.org/wiki/Deterministic_finite_automaton)
  * [Wikipedia: Non-deterministic finite automaton](http://en.wikipedia.org/wiki/Nondeterministic_finite_automaton)
  * Sipsers' book [Introduction to the Theory of Computation](http://www.amazon.com/Introduction-Theory-Computation-Michael-Sipser/dp/0534950973/ref=sr_1_2?s=books&ie=UTF8&qid=1339239779&sr=1-2)
