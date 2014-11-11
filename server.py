@@ -18,18 +18,16 @@ session_opts = {
     'session.auto': True
 }
 
-app = SessionMiddleware(bottle.app(), session_opts)
-stderr.write("Application initialized with session\n")
-
 # with open('../.htaccess', 'w') as htaccess:
 #     htaccess.write("""<IfModule mod_rewrite.c>
 #     RewriteEngine On
 #     RewriteRule api/(.*) http://%s:%s/$1 [P,QSA]
 # </IfModule>""" % (host, port))
 
-DB.init(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
-stderr.write("Connected to Google Cloud SQL database\n")
+app = SessionMiddleware(bottle.app(), session_opts)
+stderr.write("Application initialized with session\n")
 
+"""Importing Controllers"""
 # Controllers.Hooks()
 Controllers.StaticFiles()
 Controllers.Routes()

@@ -112,9 +112,19 @@ class Users:
             ),
             decoder=json.loads
         )
+
+
+
         json_path = 'https://www.googleapis.com/oauth2/v1/userinfo'
         session_json = auth_session.get(json_path).json()
         # For non-Ascii characters to work properly!
         session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())
 
+        user_info = dict(
+            email = session_json['email'],
+            name= session_json['name'],
+            google_id= session_json['id'],
+            picture = session_json['picture']
+        )
+        embed()
         return autom_page
