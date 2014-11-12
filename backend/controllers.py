@@ -52,6 +52,10 @@ class Routes:
 
 class Automaton:
     def __init__(self):
+        @bottle.route('/automaton/<id:int>', method='GET')
+        def view(id):
+            pass
+
         @bottle.route('/api/automaton/create', method='POST')
         def create():
             stderr.write("Processing automaton/create request\n")
@@ -65,16 +69,8 @@ class Automaton:
 
             return autom_page
 
-        @bottle.route('/automaton/delete', method='POST')
-        def delete():
-            pass
-
-        @bottle.route('/automaton/update', method='POST')
-        def update():
-            pass
-
         @bottle.route('/api/automaton/<id:int>',method='GET')
-        def view(id):
+        def api_view(id):
             stderr.write("Processing automaton/view request with id %s\n" % (id))
 
             stderr.write("Retrieving automaton\n")
@@ -83,8 +79,12 @@ class Automaton:
 
             return item
 
-        @bottle.route('/automaton/list', method='GET')
-        def list():
+        @bottle.route('api/automaton/delete/<id:int>', method='POST')
+        def delete(id):
+            pass
+
+        @bottle.route('api/automaton/update/<id:int>/<id:int>', method='POST')
+        def update(id):
             pass
 
 
