@@ -6,6 +6,7 @@ import rauth
 import config
 import models
 from sys import stderr
+from models import User
 
 from IPython import embed ## For Debugging
 
@@ -27,7 +28,6 @@ redirect_uri = '{uri}:{port}/success'.format(
 
 # def autom_page(id):
 page_data = dict(
-  AID = None,
   STATE = None
 )
 template = bottle.template
@@ -55,16 +55,10 @@ class Routes:
     def __init__(self):
       @bottle.route('/', methods=['GET'])
       def index():
-        page_data['AID'] = None
         return template(page,page_data)
 
 class Automaton:
     def __init__(self):
-        @bottle.route('/<aid:int>', method='GET')
-        def view(aid):
-            page_data['AID'] = aid
-            return template(page,page_data)
-
         @bottle.route('/api/automaton/create', method='POST')
         def create():
             stderr.write("Processing automaton/create request\n")
@@ -129,11 +123,16 @@ class Users:
         # For non-Ascii characters to work properly!
         session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())
 
+        user=User()
+
         user_info = dict(
-            email = session_json['email'],
-            name= session_json['name'],
             google_id= session_json['id'],
+            name= session_json['name'],
+            email = session_json['email'],
             picture = session_json['picture']
         )
-        embed()
+        stderr.write("Creating new user\n")
+        user.create(user_info)
+        stderr.write("Success\n")
+
         return template(page,page_data)

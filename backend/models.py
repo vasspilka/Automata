@@ -15,7 +15,10 @@ def automaton_create(name, data):
 def automaton_item(id):
     return db.selectOne('automata', {'id': id}, ('id', 'name', 'data'))
 
-class User:
-
+class User(object):
   def automatons():
-    pass;
+    pass
+
+  def create(self,info):
+    return db.insert('users', {'google_id':info['google_id'],'name': info['name'],
+                     'email': info['email'],'picture': info['picture']})
