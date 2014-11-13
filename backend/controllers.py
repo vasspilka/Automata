@@ -25,16 +25,23 @@ redirect_uri = '{uri}:{port}/success'.format(
     port=config.PORT
 )
 
-autom_page = bottle.template(open('index.tpl',"r").read())
+# def autom_page(id):
+page_data = dict(
+  AID = None,
+  STATE = None
+)
+template = bottle.template
+page = open('index.tpl',"r").read()
+
 
 # class Hooks:
 #   def __init__(self):
 #     @bottle.hook('before_request')
 #     def global_session():
 #        # Random 32byte state and Session intialazation
-#        state = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
+#        page_data['STATE'] = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
 #        bottle.request.session = bottle.request.environ.get('beaker.session')
-#        bottle.request.session['state'] = state
+#        bottle.request.session['state'] = page_data['STATE']
 #        bottle.request.session.save()
 
 
@@ -48,13 +55,14 @@ class Routes:
     def __init__(self):
       @bottle.route('/', methods=['GET'])
       def index():
-        return autom_page
+        return template(page,page_data)
 
 class Automaton:
     def __init__(self):
-        @bottle.route('/automaton/<id:int>', method='GET')
-        def view(id):
-            pass
+        @bottle.route('/<aid:int>', method='GET')
+        def view(aid):
+            page_data['AID'] = aid
+            return template(page,page_data)
 
         @bottle.route('/api/automaton/create', method='POST')
         def create():
@@ -67,7 +75,7 @@ class Automaton:
             id = models.automaton_create(name, data)
             stderr.write("New automaton was created with id %i\n" % (id))
 
-            return autom_page
+            return template(page,page_data)
 
         @bottle.route('/api/automaton/<id:int>',method='GET')
         def api_view(id):
@@ -83,7 +91,7 @@ class Automaton:
         def delete(id):
             pass
 
-        @bottle.route('api/automaton/update/<id:int>/<id:int>', method='POST')
+        @bottle.route('api/automaton/update/<id:int>', method='POST')
         def update(id):
             pass
 
@@ -127,4 +135,4 @@ class Users:
             picture = session_json['picture']
         )
         embed()
-        return autom_page
+        return template(page,page_data)

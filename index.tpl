@@ -80,6 +80,21 @@
         <script src='js/runner.js'></script>
         <script src='js/ui.js'></script>
         <script>
+           % if AID:
+             $(document).ready(function() {
+               var response = '';
+               $.ajax({ type: "GET",
+                        url: "api/automaton/{{AID}}",
+                        async: false,
+                        success : function(text)
+                        {
+                            response = text;
+                        }
+               });
+               nfaview.deserialize(response.data);
+             })
+           % end
+
            $('#create').click( function() {
              data = nfaview.serialize();
              callback = "";
