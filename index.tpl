@@ -30,8 +30,6 @@
                 <li><a href=''>Sign out</a></li>
             </ol>
             -->
-            <button id="create">create</button>
-            <button id="view">view</button>
             <a href="/login">Log in using Google</a>
             <div class='eof'></div>
         </header>
@@ -79,47 +77,5 @@
         <script src='js/hidpi-canvas.min.js'></script>
         <script src='js/runner.js'></script>
         <script src='js/ui.js'></script>
-        <script>
-           % if AID:
-             $(document).ready(function() {
-               var response = '';
-               $.ajax({ type: "GET",
-                        url: "api/automaton/{{AID}}",
-                        async: false,
-                        success : function(text)
-                        {
-                            response = text;
-                        }
-               });
-               nfaview.deserialize(response.data);
-             })
-           % end
-           $('#create').click( function() {
-             $.ajax({ type: "POST",
-                    url: "api/automaton/create",
-                    data: nfaview.serialize(),
-                    name: '',
-                    async: false,
-                    success : function(text)
-                    {
-                        response = text;
-                    }
-             });
-             alert("Automaton created. Link: http://localhost:8000/" + response);
-           } );
-           $('#view').click( function() {
-             var response = '';
-             var id = prompt("Please enter automton id");
-             $.ajax({ type: "GET",
-                      url: "api/automaton/" + id,
-                      async: false,
-                      success : function(text)
-                      {
-                          response = text;
-                      }
-             });
-             nfaview.deserialize(response.data);
-           } );
-        </script>
     </body>
 </html>
