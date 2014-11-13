@@ -55,6 +55,7 @@ class Routes:
     def __init__(self):
       @bottle.route('/', methods=['GET'])
       def index():
+        page_data['AID'] = None
         return template(page,page_data)
 
 class Automaton:
@@ -75,7 +76,7 @@ class Automaton:
             id = models.automaton_create(name, data)
             stderr.write("New automaton was created with id %i\n" % (id))
 
-            return template(page,page_data)
+            return str(id)
 
         @bottle.route('/api/automaton/<id:int>',method='GET')
         def api_view(id):

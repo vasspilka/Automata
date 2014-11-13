@@ -4,9 +4,9 @@ import config
 from IPython import embed ## For Debugging
 from sys import stderr
 
-database = "mysql+mysqldb://"+config.SQL.USERNAME+":"+config.SQL.PASSWORD+"@"+config.SQL.HOST+"/"+config.SQL.DATABASE+"?charset=utf8&use_unicode=0"
+# database = "mysql+mysqldb://"+config.SQL.USERNAME+":"+config.SQL.PASSWORD+"@"+config.SQL.HOST+"/"+config.SQL.DATABASE+"?charset=utf8&use_unicode=0"
+# create_engine(database)
 db=db.Database(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
-create_engine(database)
 stderr.write("Connected to Google Cloud SQL database\n")
 
 def automaton_create(name, data):

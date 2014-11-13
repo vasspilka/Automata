@@ -94,16 +94,24 @@
                nfaview.deserialize(response.data);
              })
            % end
-
            $('#create').click( function() {
-             data = nfaview.serialize();
-             callback = "";
-             Server.Automaton.create(data,callback,200);
+             $.ajax({ type: "POST",
+                    url: "api/automaton/create",
+                    data: nfaview.serialize(),
+                    name: '',
+                    async: false,
+                    success : function(text)
+                    {
+                        response = text;
+                    }
+             });
+             alert("Automaton created. Link: http://localhost:8000/" + response);
            } );
            $('#view').click( function() {
              var response = '';
+             var id = prompt("Please enter automton id");
              $.ajax({ type: "GET",
-                      url: "api/automaton/1",
+                      url: "api/automaton/" + id,
                       async: false,
                       success : function(text)
                       {
