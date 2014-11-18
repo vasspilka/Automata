@@ -4,4 +4,3 @@ requests
 Beaker
 ipython
 MySQL-python
-SQLAlchemy

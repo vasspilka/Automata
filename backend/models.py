@@ -1,11 +1,8 @@
 import db
-# from sqlalchemy import create_engine
 import config
 from sys import stderr
 from IPython import embed ## For Debugging
 
-# database = "mysql+mysqldb://"+config.SQL.USERNAME+":"+config.SQL.PASSWORD+"@"+config.SQL.HOST+"/"+config.SQL.DATABASE+"?charset=utf8&use_unicode=0"
-# create_engine(database)
 DB=db.Database(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
 stderr.write("Connected to Google Cloud SQL database\n")
 
@@ -20,10 +17,11 @@ class User(object):
   def get(self,gid):
     return DB.selectOne("users",{'gid': gid})
 
-  def automata(self,id):
+  def automata(self,gid):
     user = DB.selectOne("users",{'gid': gid})
-    # Don't forget to check if user empty
-    user_automata = DB.select("automata",{'uid': user['gid']})
+    if user:
+      user_automata = DB.select("automata",{'uid': user['gid']})
+
     return user_automata
 
   def create(self,info):
