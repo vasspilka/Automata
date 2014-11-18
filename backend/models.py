@@ -1,8 +1,8 @@
 import db
 # from sqlalchemy import create_engine
 import config
-from IPython import embed ## For Debugging
 from sys import stderr
+from IPython import embed ## For Debugging
 
 # database = "mysql+mysqldb://"+config.SQL.USERNAME+":"+config.SQL.PASSWORD+"@"+config.SQL.HOST+"/"+config.SQL.DATABASE+"?charset=utf8&use_unicode=0"
 # create_engine(database)
@@ -17,16 +17,15 @@ def automaton_item(id):
 
 class User(object):
 
-  def get(self,id):
-    return DB.selectOne("users",{'id': id})
+  def get(self,gid):
+    return DB.selectOne("users",{'gid': gid})
 
   def automata(self,id):
-    uid = DB.selectOne("users",{'id': id},('id'))
-    user_automatons = DB.select("automata",{'uid': uid})
-    embed()
-
-    return use
+    user = DB.selectOne("users",{'gid': gid})
+    # Don't forget to check if user empty
+    user_automata = DB.select("automata",{'uid': user['gid']})
+    return user_automata
 
   def create(self,info):
-    return DB.insert('users', {'google_id':info['google_id'],'name': info['name'],
+    return DB.insert('users', {'gid':info['google_id'],'name': info['name'],
                      'email': info['email'],'picture': info['picture']})

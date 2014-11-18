@@ -27,21 +27,21 @@ redirect_uri = '{uri}:{port}/success'.format(
 )
 
 page_data = dict(
-  STATE = None
+  STATE = None,
+  user = None
 )
 template = bottle.template
 page = open('index.tpl',"r").read()
-
 
 class Hooks:
   def __init__(self):
     @bottle.hook('before_request')
     def global_session():
-      #  # Random 32byte state and Session intialazation
-      #  page_data['STATE'] = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
-      #  bottle.request.session = bottle.request.environ.get('beaker.session')
-      #  bottle.request.session['state'] = page_data['STATE']
-      #  bottle.request.session.save()
+       session = bottle.request.environ.get('beaker.session')
+       # Random 32byte state and Session intialazation
+       page_data['STATE'] = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
+       session['state'] = page_data['STATE']
+       session.save()
 
 
 class StaticFiles:
@@ -54,6 +54,10 @@ class Routes:
     def __init__(self):
       @bottle.route('/', methods=['GET'])
       def index():
+        session = bottle.request.environ.get('beaker.session')
+        if session['user']:
+          page_data['user'] = session['user']
+        embed()
         return template(page,page_data)
 
 class Automaton:
@@ -103,31 +107,43 @@ class Users:
 
         bottle.redirect(url)
 
+
+      @bottle.route('/logout')
+      def logout():
+        session = bottle.request.environ.get('beaker.session')
+        session['user'] = None
+        return template(page,page_data)
+
       @bottle.route('/success<:re:/?>')
       def login_success():
         user=User()
+        session = bottle.request.environ.get('beaker.session')
+
         auth_session = google.get_auth_session(
-            data=dict(
-                code=bottle.request.params.get('code'),
-                redirect_uri=redirect_uri,
-                grant_type='authorization_code'
-            ),
-            decoder=json.loads
-        )
+            data=dict(code=bottle.request.params.get('code'),
+                      redirect_uri=redirect_uri,
+                      grant_type='authorization_code'),
+            decoder=json.loads)
 
         session_json = auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
         session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())# For non-Ascii characters
 
-        user_info = dict(
-            google_id= session_json['id'],
-            name= session_json['name'],
-            email = session_json['email'],
-            picture = session_json['picture']
-        )
+        # Checks if user exists, if not creates new one
+        if (user.get(session_json['id']) == None):
+          user_info = dict(
+              google_id= session_json['id'],
+              name= session_json['name'],
+              email = session_json['email'],
+              picture = session_json['picture']
+          )
 
-        stderr.write("Creating new user\n")
-        user.create(user_info)
-        stderr.write("Success\n")
+          stderr.write("Creating new user\n")
+          user.create(user_info)
+          stderr.write("Success\n")
+
+
+        # Creates user session
+        session['user'] = session_json['id']
 
         return template(page,page_data)
 
