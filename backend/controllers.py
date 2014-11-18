@@ -26,7 +26,6 @@ redirect_uri = '{uri}:{port}/success'.format(
     port=config.PORT
 )
 
-# def autom_page(id):
 page_data = dict(
   STATE = None
 )
@@ -34,15 +33,15 @@ template = bottle.template
 page = open('index.tpl',"r").read()
 
 
-# class Hooks:
-#   def __init__(self):
-#     @bottle.hook('before_request')
-#     def global_session():
-#        # Random 32byte state and Session intialazation
-#        page_data['STATE'] = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
-#        bottle.request.session = bottle.request.environ.get('beaker.session')
-#        bottle.request.session['state'] = page_data['STATE']
-#        bottle.request.session.save()
+class Hooks:
+  def __init__(self):
+    @bottle.hook('before_request')
+    def global_session():
+      #  # Random 32byte state and Session intialazation
+      #  page_data['STATE'] = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
+      #  bottle.request.session = bottle.request.environ.get('beaker.session')
+      #  bottle.request.session['state'] = page_data['STATE']
+      #  bottle.request.session.save()
 
 
 class StaticFiles:
@@ -106,24 +105,18 @@ class Users:
 
       @bottle.route('/success<:re:/?>')
       def login_success():
-        code = bottle.request.params.get('code')
+        user=User()
         auth_session = google.get_auth_session(
             data=dict(
-                code=code,
+                code=bottle.request.params.get('code'),
                 redirect_uri=redirect_uri,
                 grant_type='authorization_code'
             ),
             decoder=json.loads
         )
 
-
-
-        json_path = 'https://www.googleapis.com/oauth2/v1/userinfo'
-        session_json = auth_session.get(json_path).json()
-        # For non-Ascii characters to work properly!
-        session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())
-
-        user=User()
+        session_json = auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
+        session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())# For non-Ascii characters
 
         user_info = dict(
             google_id= session_json['id'],
@@ -131,8 +124,16 @@ class Users:
             email = session_json['email'],
             picture = session_json['picture']
         )
+
         stderr.write("Creating new user\n")
         user.create(user_info)
         stderr.write("Success\n")
 
         return template(page,page_data)
+
+      @bottle.route('/api/user/<id:int>/automatons',method='GET')
+      def automatons(id):
+        user=User()
+        automatons = user.automata(id)
+
+        return automatons

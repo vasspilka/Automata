@@ -7,6 +7,7 @@ CREATE TABLE users (
     password VARCHAR( 32 ) DEFAULT NULL,
     created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
 CREATE TABLE automata (
     id INT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
     public BOOLEAN NOT NULL DEFAULT 1,
@@ -17,11 +18,10 @@ CREATE TABLE automata (
     FOREIGN KEY (uid) REFERENCES user(id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-
-CREATE TABLE automata_users (
-    uid INT unsigned NOT NULL,
-    aid INT unsigned NOT NULL,
-    FOREIGN KEY (uid) REFERENCES user(id),
-    FOREIGN KEY (aid) REFERENCES automata(id)
-
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+-- CREATE TABLE automata_users (
+--     uid INT unsigned NOT NULL,
+--     aid INT unsigned NOT NULL,
+--     FOREIGN KEY (uid) REFERENCES user(id),
+--     FOREIGN KEY (aid) REFERENCES automata(id)
+--
+-- ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
