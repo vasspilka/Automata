@@ -9,11 +9,11 @@ from IPython import embed ## For Debugging
 DB=db.Database(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
 stderr.write("Connected to Google Cloud SQL database\n")
 
-def automaton_create(name, data):
-    return DB.insert('automata', {'name': name, 'data': data})
+def automaton_create(name, data, uid = ''):
+    return DB.insert('automata', {'name': name, 'data': data, 'uid': uid})
 
 def automaton_item(id):
-    return DB.selectOne('automata', {'id': id}, ('id', 'name', 'data'))
+    return DB.selectOne('automata', {'id': id}, ('id', 'name', 'data', 'uid'))
 
 class User(object):
 

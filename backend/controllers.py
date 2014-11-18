@@ -56,8 +56,9 @@ class Routes:
       def index():
         session = bottle.request.environ.get('beaker.session')
         if session['user']:
+          user=User()
           page_data['user'] = session['user']
-        embed()
+        
         return template(page,page_data)
 
 class Automaton:
@@ -112,7 +113,7 @@ class Users:
       def logout():
         session = bottle.request.environ.get('beaker.session')
         session['user'] = None
-        return template(page,page_data)
+        bottle.redirect('/')
 
       @bottle.route('/success<:re:/?>')
       def login_success():
@@ -141,11 +142,10 @@ class Users:
           user.create(user_info)
           stderr.write("Success\n")
 
-
         # Creates user session
         session['user'] = session_json['id']
 
-        return template(page,page_data)
+        bottle.redirect('/')
 
       @bottle.route('/api/user/<id:int>/automatons',method='GET')
       def automatons(id):
