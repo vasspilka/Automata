@@ -17,5 +17,14 @@ var Server = {
                 error( thrownError );
             } );
         }
+    },
+    User: {
+      view: function( id, callback, error ) {
+          $.get( 'api/user/' + id, {}, function( result ) {
+              callback( result );
+          }, 'json' ).error( function( jqXHR, settings, thrownError ) {
+              error( thrownError );
+          } );
+      }
     }
 };

@@ -24,13 +24,13 @@
                 <li class='run button'><a href=''><span></span>Run</a></li>
                 <li class='share button'><a href=''><span></span>Share</a></li>
             </ol>
-            <!--
-            <ol class='account'>
-                <li><a href=''><img src='images/dio.jpg' class='avatar' width='27' height='27' /> dionyziz</a></li>
-                <li><a href=''>Sign out</a></li>
-            </ol>
-            -->
-            <a href="/login">Log in using Google</a>
+            <div id="user">
+              <ol class='account' style="display:none;">
+                  <li><img src='images/dio.jpg' class='avatar' width='27' height='27' /> dionyziz</a></li>
+                  <li href="/logout">Sign out</li>
+              </ol>
+              <a href="/login">Log in with Google</a>
+            </div>
             <div class='eof'></div>
         </header>
         <div class='runner'>

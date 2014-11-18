@@ -55,10 +55,10 @@ class Routes:
       @bottle.route('/', methods=['GET'])
       def index():
         session = bottle.request.environ.get('beaker.session')
-        if session['user']:
+        if 'user' in session:
           user=User()
           page_data['user'] = session['user']
-        
+
         return template(page,page_data)
 
 class Automaton:
@@ -102,8 +102,7 @@ class Users:
         params = dict(
             scope='email profile',
             response_type='code',
-            redirect_uri=redirect_uri
-        )
+            redirect_uri=redirect_uri)
         url = google.get_authorize_url(**params)
 
         bottle.redirect(url)
@@ -112,7 +111,9 @@ class Users:
       @bottle.route('/logout')
       def logout():
         session = bottle.request.environ.get('beaker.session')
-        session['user'] = None
+        if 'user' in session:
+          del session['user']
+
         bottle.redirect('/')
 
       @bottle.route('/success<:re:/?>')
@@ -135,9 +136,7 @@ class Users:
               google_id= session_json['id'],
               name= session_json['name'],
               email = session_json['email'],
-              picture = session_json['picture']
-          )
-
+              picture = session_json['picture'])
           stderr.write("Creating new user\n")
           user.create(user_info)
           stderr.write("Success\n")
@@ -147,9 +146,14 @@ class Users:
 
         bottle.redirect('/')
 
-      @bottle.route('/api/user/<id:int>/automatons',method='GET')
-      def automatons(id):
+      @bottle.route('/api/user/<gid:int>',method='GET')
+      def info(gid):
         user=User()
-        automatons = user.automata(id)
+        return user.get(gid)
+
+      @bottle.route('/api/user/<gid:int>/automatons',method='GET')
+      def automatons(gid):
+        user=User()
+        automatons = user.automata(gid)
 
         return automatons
