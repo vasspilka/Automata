@@ -25,14 +25,6 @@
                 <li class='share button'><a href=''><span></span>Share</a></li>
             </ol>
             <div id="user">
-              % if user:
-                <ol class='account'>
-                    <li><img src='images/dio.jpg' class='avatar' width='27' height='27' /> dionyziz</a></li>
-                    <a href="/logout">Sign out</a>
-                </ol>
-              % else:
-                <a href="/login">Log in with Google</a>
-              % end
             </div>
             <div class='eof'></div>
         </header>
@@ -80,5 +72,18 @@
         <script src='js/hidpi-canvas.min.js'></script>
         <script src='js/runner.js'></script>
         <script src='js/ui.js'></script>
+        <script>
+          % if user:
+            $.ajax({ type: "GET",
+                      url: "api/user/" + {{user}},
+                      async: false,
+                      success : function(text)
+                        {response = text;}
+            });
+            $('#user').html('<ol class=\"account\"><li><img src=\"'+response.picture+'\" class=\"avatar\" width=\"27\" height=\"27\" />'+response.name+'</a></li><a href=\"/logout\">Sign out</a></ol>');
+          % else:
+            $('#user').html('<ol class=\"account\"><a href="/login">Log in with Google</a></ol>');
+          % end
+        </script>
     </body>
 </html>

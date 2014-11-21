@@ -73,9 +73,9 @@ class Automaton:
             name = bottle.request.forms.name
             data = bottle.request.forms.data
 
-            stderr.write("Creating new automaton\n")
+            stderr.write("Creating new automaton")
             id = models.automaton_create(name, data)
-            stderr.write("New automaton was created with id %i\n" % (id))
+            stderr.write("\nNew automaton was created with id %i\n" % (id))
 
             return str(id)
 
@@ -132,7 +132,6 @@ class Users:
 
         session_json = auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
         session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())# For non-Ascii characters
-
         # Checks if user exists, if not creates new one
         if (user.get(session_json['id']) == None):
           user_info = dict(
