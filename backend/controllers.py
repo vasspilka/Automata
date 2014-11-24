@@ -68,14 +68,21 @@ class Automaton:
     def __init__(self):
         @bottle.route('/api/automaton/create', method='POST')
         def create():
+            session = bottle.request.environ.get('beaker.session')
             stderr.write("Processing automaton/create request\n")
 
             name = bottle.request.forms.name
             data = bottle.request.forms.data
 
             stderr.write("Creating new automaton")
-            id = models.automaton_create(name, data)
-            stderr.write("\nNew automaton was created with id %i\n" % (id))
+            if 'user' in session:
+              id = models.automaton_create(name, data, session['user'])
+            else:
+              id = models.automaton_create(name, data)
+
+            stderr.write("\nNew automaton was created with id %i. " % (id))
+            if 'user' in session:
+              stderr.write("And user id %s\n" % (session['user']))
 
             return str(id)
 
@@ -132,6 +139,7 @@ class Users:
 
         session_json = auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
         session_json = dict((k, unicode(v).encode('utf-8')) for k, v in session_json.iteritems())# For non-Ascii characters
+
         # Checks if user exists, if not creates new one
         if (user.get(session_json['id']) == None):
           user_info = dict(
@@ -153,9 +161,9 @@ class Users:
         user=User()
         return user.get(gid)
 
-      @bottle.route('/api/user/<gid:int>/automatons',method='GET')
-      def automatons(gid):
+      @bottle.route('/api/user/<gid:int>/automata',method='GET')
+      def get_automata(gid):
         user=User()
-        automatons = user.automata(gid)
+        automata = json.dumps(user.automata(gid))
 
-        return automatons
+        return automata

@@ -19,12 +19,22 @@ var Server = {
         }
     },
     User: {
-      view: function( id, callback, error ) {
-          $.get( 'api/user/' + id, {}, function( result ) {
-              callback( result );
-          }, 'json' ).error( function( jqXHR, settings, thrownError ) {
-              error( thrownError );
-          } );
+      get: function(gid) {
+        $.ajax({ type: "GET",
+                  url: "api/user/" + gid,
+                  async: false,
+                  success : function(text)
+                    {response = text;}
+        });
+      },
+      get_automata: function(gid) {
+        $.ajax({ type: "GET",
+                  url: "api/user/" + gid + "/automata",
+                  async: false,
+                  success : function(text)
+                    {response = text;}
+        });
+        return JSON.parse(response)
       }
     }
 };
