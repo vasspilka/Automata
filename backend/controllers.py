@@ -55,9 +55,12 @@ class Routes:
       @bottle.route('/', methods=['GET'])
       def index():
         session = bottle.request.environ.get('beaker.session')
+        user=User()
         if 'user' in session:
-          user=User()
           page_data['user'] = session['user']
+        else:
+          page_data['user'] = None
+
 
         return template(page,page_data)
 

@@ -25,11 +25,14 @@
                 <li class='share button'><a href=''><span></span>Share</a></li>
             </ol>
             <div id="user">
-              <ol class='account' style="display:none;">
-                  <li><img src='images/dio.jpg' class='avatar' width='27' height='27' /> dionyziz</a></li>
-                  <li href="/logout">Sign out</li>
-              </ol>
-              <a href="/login">Log in with Google</a>
+              % if user:
+                <ol class='account'>
+                    <li><img src='images/dio.jpg' class='avatar' width='27' height='27' /> dionyziz</a></li>
+                    <a href="/logout">Sign out</a>
+                </ol>
+              % else:
+                <a href="/login">Log in with Google</a>
+              % end
             </div>
             <div class='eof'></div>
         </header>

@@ -1,6 +1,3 @@
-.htaccess
-js/jquery-1.7.2.js
-.data
-
 backend/*.pyc
 backend/config.py
+.data
