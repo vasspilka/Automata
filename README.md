@@ -47,6 +47,11 @@ Some ideas for the future:
  * NFA to DFA conversion
  * Automaton minimization
 
+Deployment
+==========
+
+
+
 License
 =======
 The Automata editor is licensed under the MIT license:

@@ -1,3 +1,4 @@
 backend/*.pyc
 backend/config.py
 .data
+.htaccess

@@ -8,8 +8,6 @@ import models
 from sys import stderr
 from models import User
 
-from IPython import embed ## For Debugging
-
 oauth2 = rauth.OAuth2Service
 
 google = oauth2(
@@ -32,16 +30,6 @@ page_data = dict(
 )
 template = bottle.template
 page = open('index.tpl',"r").read()
-
-class Hooks:
-  def __init__(self):
-    @bottle.hook('before_request')
-    def global_session():
-       session = bottle.request.environ.get('beaker.session')
-       # Random 32byte state and Session intialazation
-       page_data['STATE'] = ''.join(random.choice(string.ascii_uppercase + string.digits)for x in xrange(32))
-       session['state'] = page_data['STATE']
-       session.save()
 
 
 class StaticFiles:

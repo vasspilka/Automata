@@ -1,7 +1,6 @@
 import db
 import config
 from sys import stderr
-from IPython import embed ## For Debugging
 
 DB=db.Database(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
 stderr.write("Connected to Google Cloud SQL database\n")
