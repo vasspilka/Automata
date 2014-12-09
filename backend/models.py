@@ -3,7 +3,7 @@ import config
 from sys import stderr
 
 DB=db.Database(config.SQL.HOST, config.SQL.USERNAME, config.SQL.PASSWORD, config.SQL.DATABASE)
-stderr.write("Connected to Google Cloud SQL database\n")
+stderr.write("Connected to SQL database\n")
 
 def automaton_create(name, data, uid = ''):
     return DB.insert('automata', {'name': name, 'data': data, 'uid': uid})

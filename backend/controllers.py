@@ -19,42 +19,11 @@ google = oauth2(
     base_url='https://accounts.google.com/o/oauth2/auth',
 )
 
-redirect_uri = '{uri}:{port}/success'.format(
-    uri=config.GOOGLE_BASE_URI,
-    port=config.PORT
-)
-
-page_data = dict(
-  STATE = None,
-  user = None
-)
-template = bottle.template
-page = open('index.html',"r").read()
-
-
-class StaticFiles:
-  def __init__(self):
-    @bottle.route('/site/<path:re:(images|css|js)\/.+>')
-    def server_static(path):
-      return bottle.static_file(path, root='site')
-
-class Routes:
-    def __init__(self):
-      @bottle.route('/', methods=['GET'])
-      def index():
-        session = bottle.request.environ.get('beaker.session')
-        user=User()
-        if 'user' in session:
-          page_data['user'] = session['user']
-        else:
-          page_data['user'] = None
-
-
-        return template(page,page_data)
+redirect_uri = 'http://automata.discrete.gr/api/success'
 
 class Automaton:
     def __init__(self):
-        @bottle.route('/api/automaton/create', method='POST')
+        @bottle.route('/automaton/create', method='POST')
         def create():
             session = bottle.request.environ.get('beaker.session')
             stderr.write("Processing automaton/create request\n")
@@ -74,7 +43,7 @@ class Automaton:
 
             return str(id)
 
-        @bottle.route('/api/automaton/<id:int>',method='GET')
+        @bottle.route('/automaton/<id:int>',method='GET')
         def api_view(id):
             stderr.write("Processing automaton/view request with id %s\n" % (id))
 
@@ -84,18 +53,18 @@ class Automaton:
 
             return item
 
-        @bottle.route('api/automaton/delete/<id:int>', method='POST')
+        @bottle.route('/automaton/delete/<id:int>', method='POST')
         def delete(id):
             pass
 
-        @bottle.route('api/automaton/update/<id:int>', method='POST')
+        @bottle.route('/automaton/update/<id:int>', method='POST')
         def update(id):
             pass
 
 
 class Users:
     def __init__(self):
-      @bottle.route('/api/user',method='GET')
+      @bottle.route('/user',method='GET')
       def logged_in():
         session = bottle.request.environ.get('beaker.session')
         if 'user' in session:
@@ -152,12 +121,12 @@ class Users:
 
         bottle.redirect('/')
 
-      @bottle.route('/api/user/<gid:int>',method='GET')
+      @bottle.route('/user/<gid:int>',method='GET')
       def info(gid):
         user=User()
         return user.get(gid)
 
-      @bottle.route('/api/user/<gid:int>/automata',method='GET')
+      @bottle.route('/user/<gid:int>/automata',method='GET')
       def get_automata(gid):
         user=User()
         automata = json.dumps(user.automata(gid))
