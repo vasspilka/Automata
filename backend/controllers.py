@@ -29,12 +29,12 @@ page_data = dict(
   user = None
 )
 template = bottle.template
-page = open('index.tpl',"r").read()
+page = open('index.html',"r").read()
 
 
 class StaticFiles:
   def __init__(self):
-    @bottle.route('/:path#(images|css|js)\/.+#')
+    @bottle.route('/site/<path:re:(images|css|js)\/.+>')
     def server_static(path):
       return bottle.static_file(path, root='site')
 
@@ -95,6 +95,14 @@ class Automaton:
 
 class Users:
     def __init__(self):
+      @bottle.route('/api/user',method='GET')
+      def logged_in():
+        session = bottle.request.environ.get('beaker.session')
+        if 'user' in session:
+          return session['user']
+        else:
+          return "0"
+
       @bottle.route('/login<:re:/?>')
       def login():
         params = dict(

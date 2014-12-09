@@ -122,6 +122,15 @@ var UI = {
         }
         checkHash();
         setInterval( checkHash, 250 );
+        
+        user = Server.User.logged_in();
+        if (user) {
+          user = Server.User.get(user)
+          $('#user').html('<ol class=\"account\"><li><img src=\"'+user.picture+'\" class=\"avatar\" width=\"27\" height=\"27\" />'+user.name+'</a></li><a href=\"/logout\">Sign out</a></ol>');
+        }
+        else {
+          $('#user').html('<ol class=\"account\"><a href="/login">Log in with Google</a></ol>');
+        }
     }
 };
 UI.init();

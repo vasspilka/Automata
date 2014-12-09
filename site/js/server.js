@@ -19,6 +19,15 @@ var Server = {
         }
     },
     User: {
+      logged_in: function() {
+        $.ajax({ type: "GET",
+                  url: "api/user",
+                  async: false,
+                  success : function(text)
+                    {response = text;}
+        });
+        return parseInt(response);
+      },
       get: function(gid) {
         $.ajax({ type: "GET",
                   url: "api/user/" + gid,
@@ -26,6 +35,7 @@ var Server = {
                   success : function(text)
                     {response = text;}
         });
+        return response
       },
       get_automata: function(gid) {
         $.ajax({ type: "GET",
