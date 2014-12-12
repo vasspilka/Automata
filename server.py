@@ -16,6 +16,8 @@ app = SessionMiddleware(bottle.app(), session_opts)
 stderr.write("Application initialized with session\n")
 
 """Importing Controllers"""
+Controllers.StaticFiles()
+Controllers.Routes()
 Controllers.Automaton()
 Controllers.Users()
 stderr.write("Controllers imported\n")
