@@ -1,5 +1,6 @@
 .htaccess
 site/js/jquery-1.7.2.js
 .data
+automata.log
 backend/*.pyc
 backend/config.py
