@@ -122,6 +122,17 @@ var UI = {
         }
         checkHash();
         setInterval( checkHash, 250 );
+
+        user = Server.Session.view();
+        if (user) {
+          user = Server.Session.user(user);
+          $('#profile').show();
+          $('#user').append(user.name);
+          $('#uimage').attr("src", user.picture);
+        }
+        else {
+          $('#login').show();
+        }
     }
 };
 UI.init();

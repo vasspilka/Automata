@@ -17,6 +17,8 @@ logging.warning("Application initialized with session\n")
 Controllers.StaticFiles()
 Controllers.Routes()
 Controllers.Automaton()
+Controllers.Session()
+Controllers.Users()
 logging.warning("Controllers imported\n")
 
 if config.DEVELOPMENT:

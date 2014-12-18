@@ -17,5 +17,40 @@ var Server = {
                 error( thrownError );
             } );
         }
+    },
+    Session: {
+        view: function() {
+          $.ajax({ type: "GET",
+                   url: "api/user",
+                   async: false,
+                   success : function(text)
+                     {
+                       response = text;
+                     }
+          });
+          return parseInt(response);
+        },
+        user: function(gid) {
+          $.ajax({ type: "GET",
+                   url: "api/user/" + gid,
+                   async: false,
+                   success : function(text)
+                     {
+                       response = text;
+                     }
+          });
+          return response
+        },
+        user_automata: function(gid) {
+          $.ajax({ type: "GET",
+                   url: "api/user/" + gid + "/automata",
+                   async: false,
+                   success : function(text)
+                     {
+                       response = text;
+                     }
+          });
+          return JSON.parse(response)
+        }
     }
 };

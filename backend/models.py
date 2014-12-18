@@ -20,3 +20,18 @@ class Automaton(object):
 
     def delete(self, id):
         return DB.delete('automata', {'id': id})
+
+
+class User(object):
+
+    def get(self, gid):
+        return DB.selectOne("users", {'gid': gid})
+
+    def create(self, info):
+        return DB.insert('users', {'gid': info['google_id'], 'name': info['name'],
+                         'email': info['email'], 'picture': info['picture']})
+
+    def automata(self, gid):
+        user = DB.selectOne("users", {'gid': gid})
+        if user:
+            return DB.select("automata", {'uid': user['gid']})
