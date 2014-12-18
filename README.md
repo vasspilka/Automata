@@ -6,7 +6,7 @@ theoretical computer science university departments.
 [Try it out](http://automata.discrete.gr/)
 
 Learn more about automata:
- 
+
  * [Wikipedia: Deterministic finite automaton](http://en.wikipedia.org/wiki/Deterministic_finite_automaton)
  * [Wikipedia: Non-deterministic finite automaton](http://en.wikipedia.org/wiki/Nondeterministic_finite_automaton)
  * Sipsers' book [Introduction to the Theory of Computation](http://www.amazon.com/Introduction-Theory-Computation-Michael-Sipser/dp/0534950973/ref=sr_1_2?s=books&ie=UTF8&qid=1339239779&sr=1-2)
@@ -24,6 +24,25 @@ Technology
 ==========
 Automata is written in HTML5 and Javascript for the client and Python for the server.
 
+
+Deployment
+==========
+Application is set up to deploy under an Apache server with mod_rewrite, configured to
+point to the root of this application. To deploy first go to the
+`backend` directory, rename `config.example.py` to `config.py` and modify it.
+Then run setup.py. Finally run the app.
+You might want to run the app in a terminal multiplexer like
+`tmux` so it stays alive. The commands are as follows.
+
+    > cd backend
+    > cp config.example.py config.py
+    > vim config.py
+    > python setup.py
+    > python ../server.py
+
+That should be all :)
+
+
 Contributors
 ============
 
@@ -36,6 +55,7 @@ Contributors:
  * Dionysis "dionyziz" Zindros <dionyziz@gmail.com>
  * Manolis Zampetakis <manoszambe@hotmail.com>
  * Kostis "gtklocker" Karantias <karantiaskostis@gmail.com>
+ * Vasilis (Billy) Spilka <vasspilka@gmail.com>
 
 We're looking to add several features. If you feel like contributing, just go ahead and do a pull request with your patch.
 
