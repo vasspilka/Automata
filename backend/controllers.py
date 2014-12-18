@@ -51,7 +51,9 @@ class Automaton:
 
         @bottle.route('/api/automaton/delete/<id:int>', method='POST')
         def delete(id):
-            pass
+            logging.info("Deleting automaton with id %s\n", (id))
+
+            return models.automaton_delete(id)
 
         @bottle.route('/api/automaton/update/<id:int>', method='POST')
         def update(id):

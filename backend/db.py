@@ -70,6 +70,16 @@ class Database:
         self.query(sql, values)
         return self.conn.insert_id()
 
+    def delete(self, table, where={}):
+        """DELETE row FROM (table) WHERE (where)"""
+        sql = "DELETE FROM %s WHERE " % (table)
+        data = []
+        for w in where:
+            sql += " " + str(w) + " = %s"
+            data.append(where[w])
+        return self.query(sql, tuple(data))
+
+
 singletonDB = None
 
 

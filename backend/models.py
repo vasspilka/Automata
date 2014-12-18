@@ -19,4 +19,4 @@ class Automaton(object):
         return DB.selectOne('automata', {'id': id}, ('id', 'name', 'data', 'uid'))
 
     def delete(self, id):
-        pass
+        return DB.delete('automata', {'id': id})
