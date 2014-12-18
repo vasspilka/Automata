@@ -27,7 +27,7 @@ class Database:
         self.conn.close()
 
     def query(self, sql, data):
-        logging.info("Executing SQL query: %s\n" % (sql))
+        logging.warning("Executing SQL query: %s\n" % (sql))
 
         cursor = self.conn.cursor()
         try:
